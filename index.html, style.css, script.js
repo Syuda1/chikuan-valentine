@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine for Chikuan 💖</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(#ffe6eb, #fff0f5);
+    overflow: hidden;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    text-align: center;
+    background: rgba(255,255,255,0.8);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(255,0,100,0.2);
+    z-index: 2;
+}
+
+h1 {
+    color: #e6005c;
+}
+
+#countdown {
+    font-size: 18px;
+    color: #ff3366;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 18px;
+    margin: 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#yes {
+    background-color: #ff4d79;
+    color: white;
+}
+
+#no {
+    background-color: #aaa;
+    color: white;
+    position: absolute;
+}
+
+#gif {
+    display: none;
+    margin-top: 20px;
+}
+
+img {
+    width: 250px;
+    border-radius: 15px;
+}
+
+/* Floating hearts */
+.heart {
+    position: fixed;
+    bottom: -10px;
+    font-size: 20px;
+    animation: float 6s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes float {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+}
+
+/* Kiss animation */
+.kiss {
+    position: fixed;
+    font-size: 40px;
+    animation: kissFloat 2s ease-out forwards;
+}
+
+@keyframes kissFloat {
+    0% { transform: scale(0.5) translateY(0); opacity: 1; }
+    100% { transform: scale(1.5) translateY(-150px); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Music -->
+<audio id="bgMusic" autoplay loop>
+    <source src="https://cdn.pixabay.com/download/audio/2023/03/13/audio_3b7cfae1cb.mp3?filename=romantic-piano-soft-140500.mp3" type="audio/mpeg">
+</audio>
+
+<div class="box">
+    <div id="countdown"></div>
+
+    <h1>Will you be my Valentine, <span style="color:#ff3366;">Chikuan</span>? 💖</h1>
+
+    <button id="yes">Yes 💘</button>
+    <button id="no">No 🙃</button>
+
+    <div id="gif">
+        <h2>You had no choice 😏💋</h2>
+        <img src="https://media.giphy.com/media/I0MYt5jPR6QX5pnqM/giphy.gif">
+    </div>
+</div>
+
+<script>
+const noButton = document.getElementById("no");
+const yesButton = document.getElementById("yes");
+const gifDiv = document.getElementById("gif");
+
+/* No button dodge */
+noButton.addEventListener("mouseover", () => {
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 50);
+    noButton.style.left = x + "px";
+    noButton.style.top = y + "px";
+});
+
+/* Yes click */
+yesButton.addEventListener("click", () => {
+    gifDiv.style.display = "block";
+    confettiExplosion();
+    kissExplosion();
+});
+
+/* Floating hearts */
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (15 + Math.random()*25) + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 6000);
+}
+setInterval(createHeart, 300);
+
+/* Confetti */
+function confettiExplosion() {
+    for(let i=0;i<80;i++){
+        const conf = document.createElement("div");
+        conf.style.position="fixed";
+        conf.style.left=Math.random()*100+"vw";
+        conf.style.top="50vh";
+        conf.style.fontSize="20px";
+        conf.innerHTML="💖";
+        conf.style.animation="float 3s linear";
+        document.body.appendChild(conf);
+        setTimeout(()=>conf.remove(),3000);
+    }
+}
+
+/* Kiss animation */
+function kissExplosion(){
+    for(let i=0;i<15;i++){
+        const kiss=document.createElement("div");
+        kiss.className="kiss";
+        kiss.innerText="💋";
+        kiss.style.left=(window.innerWidth/2 + Math.random()*200 -100)+"px";
+        kiss.style.top=(window.innerHeight/2)+"px";
+        document.body.appendChild(kiss);
+        setTimeout(()=>kiss.remove(),2000);
+    }
+}
+
+/* Countdown Timer */
+function updateCountdown(){
+    const valentine = new Date(new Date().getFullYear(),1,14); // Feb 14
+    const now = new Date();
+    const diff = valentine - now;
+
+    if(diff < 0){
+        document.getElementById("countdown").innerText = "💘 It's Valentine's Day 💘";
+        return;
+    }
+
+    const days = Math.floor(diff/(1000*60*60*24));
+    const hours = Math.floor((diff/(1000*60*60))%24);
+    const mins = Math.floor((diff/(1000*60))%60);
+
+    document.getElementById("countdown").innerText =
+        `⏳ ${days} days ${hours} hours ${mins} mins until Valentine’s Day 💝`;
+}
+setInterval(updateCountdown,1000);
+updateCountdown();
+
+/* Autoplay fix for mobile */
+document.body.addEventListener("click", ()=>{
+    document.getElementById("bgMusic").play();
+},{once:true});
+</script>
+
+</body>
+</html>
